@@ -22,6 +22,7 @@
     "import/prefer-default-export": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "operator-linebreak": "off",
-    "no-static-element-interactions": "off"
+    "no-static-element-interactions": "off",
+    "@typescript-eslint/indent": "off"
   }
 }
