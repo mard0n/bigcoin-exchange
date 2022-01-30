@@ -25,6 +25,7 @@
     "no-static-element-interactions": "off",
     "@typescript-eslint/indent": "off",
     "object-curly-newline": "off",
-    "@typescript-eslint/no-unused-vars": "warn"
+    "@typescript-eslint/no-unused-vars": "warn",
+    "implicit-arrow-linebreak": "off"
   }
 }

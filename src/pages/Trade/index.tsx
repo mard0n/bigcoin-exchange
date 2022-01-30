@@ -1,102 +1,95 @@
-import React, {
-  BaseSyntheticEvent,
-  FC,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useInfiniteQuery } from 'react-query';
-import debounce from 'lodash.debounce';
-import { fetchCoinsData } from '../Home';
+import React, { BaseSyntheticEvent, FC, useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import CryptoSelector from './CryptoSelector';
+import FiatSelector from './FiatSelector';
+
+const fetchExchangeRate = async (
+  selectedFiatCurrency: string,
+  selectedCryptoCurrency: string,
+) => {
+  const res = await fetch(
+    `https://api.coingecko.com/api/v3/simple/price?ids=${selectedCryptoCurrency}&vs_currencies=${selectedFiatCurrency}`,
+  );
+  return res.json();
+};
 
 interface TradeProps {}
 
 const Trade: FC<TradeProps> = () => {
-  const { status, data, error } = useInfiniteQuery(
-    ['coins-data'],
-    fetchCoinsData,
+  const [allCryptoData, setAllCryptoData] = useState([]);
+  const [allFiatData, setAllFiatData] = useState([]);
+  const [selectedFiatCurrency, setSelectedFiatCurrency] = useState('');
+  const [selectedCryptoCurrency, setSelectedCryptoCurrency] = useState('');
+
+  const { data: cryptoToFiatRate } = useQuery(
+    ['get-exchange-rate', selectedFiatCurrency, selectedCryptoCurrency],
+    () => fetchExchangeRate(selectedFiatCurrency, selectedCryptoCurrency),
     {
-      staleTime: 60000,
-      getNextPageParam: (_lastPage, pages) => {
-        return pages.length + 1;
+      enabled: !!selectedFiatCurrency && !!selectedCryptoCurrency,
+      select: (data: any) => {
+        return data[selectedCryptoCurrency][selectedFiatCurrency];
       },
     },
   );
-  const [selectedCryptoPrice, setSelectedCryptoPrice] = useState(0);
+  const handleSelectedFiatCurrency = (fiatCurrency: string) => {
+    setSelectedFiatCurrency(fiatCurrency);
+  };
+  const handleSelectedCryptoCurrency = (cryptoCurrency: string) => {
+    setSelectedCryptoCurrency(cryptoCurrency);
+  };
+  console.log('cryptoToFiatRate', cryptoToFiatRate);
+
+  useEffect(() => {
+    Promise.all([
+      fetch('https://api.coingecko.com/api/v3/coins/list'),
+      fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies'),
+    ])
+      .then(async ([cryptoData, fiatData]) => {
+        setAllCryptoData(await cryptoData.json());
+        setAllFiatData(await fiatData.json());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   const [cryptoAmount, setCryptoAmount] = useState(0);
   const [fiatAmount, setFiatAmount] = useState(0);
-  console.log('cryptoAmount', cryptoAmount);
-  console.log('fiatAmount', fiatAmount);
 
-  const handleCryptoSelect = (e: BaseSyntheticEvent) => {
-    console.log(e.target.value);
-    setSelectedCryptoPrice(e.target.value);
-  };
   const cryptoChangeHandler = (e: BaseSyntheticEvent) => {
     const val = e.target.value;
-
-    console.log(val);
     setCryptoAmount(val);
-    setFiatAmount(val * selectedCryptoPrice);
+    setFiatAmount(val * cryptoToFiatRate);
   };
   const fiatChangeHandler = (e: BaseSyntheticEvent) => {
     const val = e.target.value;
     console.log(val);
     setFiatAmount(val);
-    setCryptoAmount(val / selectedCryptoPrice);
+    setCryptoAmount(val / cryptoToFiatRate);
   };
-  const debouncedCryptoChangeHandler = useMemo(
-    () => debounce(cryptoChangeHandler, 300),
-    [],
-  );
-  const debouncedFiatChangeHandler = useMemo(
-    () => debounce(fiatChangeHandler, 300),
-    [],
-  );
-
-  useEffect(() => {
-    return () => {
-      debouncedCryptoChangeHandler.cancel();
-      debouncedFiatChangeHandler.cancel();
-    };
-  }, []);
-
-  if (status === 'loading') {
-    return <span>Loading...</span>;
-  }
-
-  if (status === 'error') {
-    return <span>Error: {error}</span>;
-  }
-  console.log(
-    'data?.pages.flat()[0].current_price',
-    data?.pages.flat()[0].current_price,
-  );
-
   return (
     <div>
-      <div className="crypto">
+      <div>
+        {selectedFiatCurrency} {selectedCryptoCurrency}
         <input
           type="number"
           id="crypto-amount"
           value={cryptoAmount}
           onChange={cryptoChangeHandler}
         />
-        <select
-          name="crypto-list"
-          id="crypto-list"
-          onChange={handleCryptoSelect}
-        >
-          {data?.pages.flat().map((crypto: any) => {
-            return (
-              <option key={crypto.id} value={crypto.current_price}>
-                {crypto.name}
-              </option>
-            );
-          })}
-        </select>
+        <input type="number" value={fiatAmount} onChange={fiatChangeHandler} />
       </div>
-      <input type="number" value={fiatAmount} onChange={fiatChangeHandler} />
+      <div>
+        <FiatSelector
+          allFiatData={allFiatData}
+          selectedFiatCurrency={handleSelectedFiatCurrency}
+        />
+        <CryptoSelector
+          allCryptoData={allCryptoData}
+          selectedCryptoCurrency={handleSelectedCryptoCurrency}
+        />
+        <hr />
+      </div>
     </div>
   );
 };

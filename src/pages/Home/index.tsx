@@ -1,9 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
-// import { useSearchParams } from 'react-router-dom';
-// import Pagination from '../../components/Pagination';
 
-export const fetchCoinsData = async ({ pageParam = 0 }) => {
+const fetchCoinsData = async ({ pageParam = 0 }) => {
   console.log('pageParam', pageParam);
 
   const res = await fetch(
@@ -17,7 +15,13 @@ interface HomeProps {}
 
 const Home: FC<HomeProps> = () => {
   const [tableSortType, setTableSortType] = useState<
-    'name_asc' | 'name_desc' | 'price_asc' | 'price_desc' | ''
+    | 'name_asc'
+    | 'name_desc'
+    | 'price_asc'
+    | 'price_desc'
+    | 'order_asc'
+    | 'order_desc'
+    | ''
   >('');
   const { status, data, fetchNextPage, error } = useInfiniteQuery(
     ['coins-data'],
@@ -27,11 +31,35 @@ const Home: FC<HomeProps> = () => {
       getNextPageParam: (_lastPage, pages) => {
         return pages.length + 1;
       },
+      select: (oldData: any) => {
+        const updated = oldData.pages.map((page: any, i: number) => {
+          const pagesBefore = page.length * i;
+          return page.map((coin: any, index: number) => ({
+            ...coin,
+            order: pagesBefore + index + 1,
+          }));
+        });
+
+        return { pageParams: oldData.pageParams, pages: updated };
+      },
     },
   );
 
-  console.log('data', data);
+  const handleOrderSort = () => {
+    console.log('tableSortType', tableSortType);
 
+    switch (tableSortType) {
+      case 'order_asc':
+        setTableSortType('order_desc');
+        break;
+      case 'order_desc':
+        setTableSortType('order_asc');
+        break;
+      default:
+        setTableSortType('order_asc');
+        break;
+    }
+  };
   const handleNameSort = () => {
     switch (tableSortType) {
       case 'name_asc':
@@ -59,10 +87,6 @@ const Home: FC<HomeProps> = () => {
     }
   };
 
-  // const handleShowMoreCoins = () => {
-  //   setPage((state) => state + 1);
-  // };
-
   if (status === 'loading') {
     return <span>Loading...</span>;
   }
@@ -75,6 +99,7 @@ const Home: FC<HomeProps> = () => {
       <table>
         <thead>
           <tr>
+            <th onClick={handleOrderSort}>#</th>
             <th onClick={handleNameSort}>Name</th>
             <th onClick={handlePriceSort}>Price (USD)</th>
             <th>Action</th>
@@ -85,14 +110,18 @@ const Home: FC<HomeProps> = () => {
             .flat()
             .sort((a: any, b: any) => {
               switch (tableSortType) {
+                case 'order_asc':
+                  return b.order - a.order;
+                case 'order_desc':
+                  return a.order - b.order;
                 case 'name_asc':
                   return a.name.localeCompare(b.name);
                 case 'name_desc':
                   return b.name.localeCompare(a.name);
                 case 'price_asc':
-                  return a.current_price - b.current_price;
-                case 'price_desc':
                   return b.current_price - a.current_price;
+                case 'price_desc':
+                  return a.current_price - b.current_price;
                 default:
                   return 0;
               }
@@ -100,6 +129,7 @@ const Home: FC<HomeProps> = () => {
             .map((coin: any) => {
               return (
                 <tr key={coin.id}>
+                  <td>{coin.order}</td>
                   <td>
                     <img
                       src={coin.image}
