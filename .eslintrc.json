@@ -16,6 +16,10 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/jsx-one-expression-per-line": "off",
-    "react/function-component-definition": "off"
+    "react/function-component-definition": "off",
+    "react/no-unstable-nested-components": "off",
+    "arrow-body-style": "off",
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   }
 }
