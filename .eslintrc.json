@@ -20,6 +20,8 @@
     "react/no-unstable-nested-components": "off",
     "arrow-body-style": "off",
     "import/prefer-default-export": "off",
-    "jsx-a11y/label-has-associated-control": "off"
+    "jsx-a11y/label-has-associated-control": "off",
+    "operator-linebreak": "off",
+    "no-static-element-interactions": "off"
   }
 }
