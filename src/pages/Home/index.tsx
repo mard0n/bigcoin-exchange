@@ -3,7 +3,7 @@ import { useInfiniteQuery } from 'react-query';
 // import { useSearchParams } from 'react-router-dom';
 // import Pagination from '../../components/Pagination';
 
-const fetchCoinsData = async ({ pageParam = 0 }) => {
+export const fetchCoinsData = async ({ pageParam = 0 }) => {
   console.log('pageParam', pageParam);
 
   const res = await fetch(

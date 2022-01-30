@@ -1,7 +1,7 @@
 import create from 'zustand';
 
 const useStore = create(() => ({
-  isAuth: false,
+  isAuth: true,
   username: '',
 }));
 
