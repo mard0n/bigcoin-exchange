@@ -1,14 +1,11 @@
 import debounce from 'lodash.debounce';
-import React, { FC, memo, useEffect, useMemo, useState } from 'react';
+import React, { FC, memo, useMemo, useState } from 'react';
 import { FixedSizeList as List, areEqual } from 'react-window';
 
 const Row = memo(({ data, index, style }: any) => {
-  console.log('rerendered', index);
-
   const { handleSelect, coins } = data;
 
   const item = coins[index];
-  console.log('item', item);
 
   return (
     <button type="button" style={style} onClick={() => handleSelect(item)}>
@@ -41,7 +38,6 @@ const FiatSelector: FC<FiatSelectorProps> = ({
   );
 
   const handleSelect = (name: string) => {
-    console.log('selected', name);
     selectedFiatCurrency(name);
   };
 

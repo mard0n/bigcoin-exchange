@@ -1,5 +1,5 @@
 import debounce from 'lodash.debounce';
-import React, { FC, memo, useEffect, useMemo, useState } from 'react';
+import React, { FC, memo, useMemo, useState } from 'react';
 import { FixedSizeList as List, areEqual } from 'react-window';
 
 const Row = memo(({ data, index, style }: any) => {
@@ -44,7 +44,6 @@ const CryptoSelector: FC<CryptoSelectorProps> = ({
   );
 
   const handleSelect = (name: string) => {
-    console.log('selected', name);
     selectedCryptoCurrency(name);
   };
 

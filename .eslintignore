@@ -3,3 +3,5 @@ yarn.lock
 package-lock.json
 public
 build
+./postcss.config.js
+./tailwind.config.js

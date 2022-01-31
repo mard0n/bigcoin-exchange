@@ -1,9 +1,7 @@
-import React, { FC, Fragment, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 
 const fetchCoinsData = async ({ pageParam = 0 }) => {
-  console.log('pageParam', pageParam);
-
   const res = await fetch(
     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=${pageParam}&sparkline=false`,
     {},
@@ -46,8 +44,6 @@ const Home: FC<HomeProps> = () => {
   );
 
   const handleOrderSort = () => {
-    console.log('tableSortType', tableSortType);
-
     switch (tableSortType) {
       case 'order_asc':
         setTableSortType('order_desc');
@@ -95,7 +91,9 @@ const Home: FC<HomeProps> = () => {
     return <span>Error: {error}</span>;
   }
   return (
-    <>
+    <div
+      style={{ maxWidth: '1248px', marginLeft: 'auto', marginRight: 'auto' }}
+    >
       <table>
         <thead>
           <tr>
@@ -152,7 +150,7 @@ const Home: FC<HomeProps> = () => {
       <button type="button" onClick={() => fetchNextPage()}>
         Load more
       </button>
-    </>
+    </div>
   );
 };
 

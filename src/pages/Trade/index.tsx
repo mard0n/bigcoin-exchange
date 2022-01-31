@@ -37,7 +37,6 @@ const Trade: FC<TradeProps> = () => {
   const handleSelectedCryptoCurrency = (cryptoCurrency: string) => {
     setSelectedCryptoCurrency(cryptoCurrency);
   };
-  console.log('cryptoToFiatRate', cryptoToFiatRate);
 
   useEffect(() => {
     Promise.all([
@@ -63,7 +62,6 @@ const Trade: FC<TradeProps> = () => {
   };
   const fiatChangeHandler = (e: BaseSyntheticEvent) => {
     const val = e.target.value;
-    console.log(val);
     setFiatAmount(val);
     setCryptoAmount(val / cryptoToFiatRate);
   };
