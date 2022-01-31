@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/bigcoin-exchange/static/css/main.20044693.css",
-    "main.js": "/bigcoin-exchange/static/js/main.f44f3984.js",
+    "main.js": "/bigcoin-exchange/static/js/main.39b18f5e.js",
     "index.html": "/bigcoin-exchange/index.html",
     "main.20044693.css.map": "/bigcoin-exchange/static/css/main.20044693.css.map",
-    "main.f44f3984.js.map": "/bigcoin-exchange/static/js/main.f44f3984.js.map"
+    "main.39b18f5e.js.map": "/bigcoin-exchange/static/js/main.39b18f5e.js.map"
   },
   "entrypoints": [
     "static/css/main.20044693.css",
-    "static/js/main.f44f3984.js"
+    "static/js/main.39b18f5e.js"
   ]
 }
