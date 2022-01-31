@@ -1,40 +1,60 @@
 import debounce from 'lodash.debounce';
-import React, { FC, memo, useMemo, useState } from 'react';
+import React, {
+  BaseSyntheticEvent,
+  CSSProperties,
+  FC,
+  memo,
+  useMemo,
+  useState,
+} from 'react';
 import { FixedSizeList as List, areEqual } from 'react-window';
+import { AvailableCrypto } from '../../../types';
 
-const Row = memo(({ data, index, style }: any) => {
+type RowType = {
+  data: {
+    coins: AvailableCrypto[];
+    handleSelect: (selectedCtypto: AvailableCrypto) => void;
+  };
+  index: number;
+  style: CSSProperties;
+};
+
+const Row = memo(({ data, index, style }: RowType) => {
   const { handleSelect, coins } = data;
 
   const item = coins[index];
 
   return (
-    <button type="button" style={style} onClick={() => handleSelect(item.id)}>
+    <button
+      className="text-left hover:bg-gray-100"
+      type="button"
+      style={style}
+      onClick={() => handleSelect(item)}
+    >
       {item.name}
     </button>
   );
 }, areEqual);
 
 interface CryptoSelectorProps {
-  allCryptoData: any[];
-  selectedCryptoCurrency: (cryptoCurrency: string) => void;
+  allCryptoData: AvailableCrypto[];
+  selectedCrypto: (selectedCtypto: AvailableCrypto) => void;
 }
 
 const CryptoSelector: FC<CryptoSelectorProps> = ({
   allCryptoData,
-  selectedCryptoCurrency,
+  selectedCrypto,
 }) => {
   const [cryptoSearchInput, setCryptoSearchInput] = useState('');
-  const filteredCrypto = allCryptoData.filter(
-    (amount: { id: string; symbol: string; name: string }) => {
-      return (
-        amount.id.toLowerCase().includes(cryptoSearchInput) ||
-        amount.symbol.toLowerCase().includes(cryptoSearchInput) ||
-        amount.name.toLowerCase().includes(cryptoSearchInput)
-      );
-    },
-  );
+  const filteredCrypto = allCryptoData.filter((amount) => {
+    return (
+      amount.id.toLowerCase().includes(cryptoSearchInput) ||
+      amount.symbol.toLowerCase().includes(cryptoSearchInput) ||
+      amount.name.toLowerCase().includes(cryptoSearchInput)
+    );
+  });
 
-  const cryptoSearchHandler = (e: any) => {
+  const cryptoSearchHandler = (e: BaseSyntheticEvent) => {
     setCryptoSearchInput(e.target.value);
   };
 
@@ -43,8 +63,8 @@ const CryptoSelector: FC<CryptoSelectorProps> = ({
     [],
   );
 
-  const handleSelect = (name: string) => {
-    selectedCryptoCurrency(name);
+  const handleSelect = (selectedCtypto: AvailableCrypto) => {
+    selectedCrypto(selectedCtypto);
   };
 
   const data = useMemo(
@@ -53,39 +73,42 @@ const CryptoSelector: FC<CryptoSelectorProps> = ({
   );
 
   return (
-    <>
+    <div className="grid gap-4">
       <input
         type="search"
         name="crypto-search"
         id="crypto-search"
+        className="w-full border rounded-3xl h-14 px-4"
         onChange={debouncedCryptoSearchHandler}
       />
       <div className="popular-coins">
         {[
-          { name: 'Bitcoin', id: 'bitcoin' },
-          { name: 'Ethereum', id: 'ethereum' },
-          { name: 'Binance Coin', id: 'binancecoin' },
-          { name: 'Dogecoin', id: 'dogecoin' },
+          { name: 'Bitcoin', id: 'bitcoin', symbol: 'bitcoin' },
+          { name: 'Ethereum', id: 'ethereum', symbol: 'ethereum' },
+          { name: 'Binance Coin', id: 'binancecoin', symbol: 'binancecoin' },
+          { name: 'Dogecoin', id: 'dogecoin', symbol: 'dogecoin' },
         ].map((coin) => (
           <button
             key={coin.id}
             type="button"
-            onClick={() => handleSelect(coin.id)}
+            className="border rounded-xl h-9 px-2 mr-2 mb-2 hover:bg-gray-200"
+            onClick={() => handleSelect(coin)}
           >
             {coin.name}
           </button>
         ))}
       </div>
+      <hr />
       <List
-        height={150}
+        height={500}
         itemCount={filteredCrypto?.length}
         itemData={data}
-        itemSize={35}
-        width={300}
+        itemSize={50}
+        width="100%"
       >
         {Row}
       </List>
-    </>
+    </div>
   );
 };
 

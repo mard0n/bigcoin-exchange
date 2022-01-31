@@ -7,6 +7,7 @@ interface InputProps {
   id: string;
   value: any;
   handleChange: (e: SyntheticEvent) => void;
+  customStyleClass?: string;
 }
 
 const Input: FC<InputProps> = ({
@@ -16,11 +17,12 @@ const Input: FC<InputProps> = ({
   id,
   value,
   handleChange,
+  customStyleClass = '',
 }) => {
   return (
     <div className="relative h-20 bg-white">
       <input
-        className="absolute w-full h-full px-4 pt-2 font-semibold tracking-wide border rounded-md overflow-hidden"
+        className={`absolute w-full h-full px-4 pt-2 font-semibold tracking-wide border rounded-md overflow-hidden ${customStyleClass}`}
         id={id}
         type={type}
         placeholder={placeholder}

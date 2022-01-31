@@ -16,3 +16,17 @@ export type SortTypes =
   | 'order_asc'
   | 'order_desc'
   | '';
+
+export type AvailableCrypto = {
+  id: string;
+  name: string;
+  symbol: string;
+};
+
+export type AvailableFiat = string;
+
+export type ExchangeRate = {
+  [cryptoName: string]: {
+    [fiatName: string]: number;
+  };
+};

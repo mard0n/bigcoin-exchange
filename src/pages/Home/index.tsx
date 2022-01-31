@@ -215,7 +215,7 @@ const Home: FC<HomeProps> = () => {
         </tbody>
       </table>
       <button
-        className="mt-4 bg-blue-700 text-white px-5 py-2 font-bold rounded-2xl"
+        className="mt-4 bg-blue-700 text-white px-5 py-2 font-bold rounded-full"
         type="button"
         onClick={() => fetchNextPage()}
       >
