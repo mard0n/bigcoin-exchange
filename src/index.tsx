@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename="/bigcoin-exchange">
         <Navbar />
         <main className="py-5">
           <Routes>
