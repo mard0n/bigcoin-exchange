@@ -28,8 +28,8 @@ const Navbar: FC<NavbarProps> = () => {
     username: state.username,
   }));
   return (
-    <header className="bg-white border-b sticky top-0">
-      <div className="container mx-auto flex h-20 justify-between items-center px-8">
+    <header className="bg-white border-b sticky top-0 z-20">
+      <div className="container mx-auto flex h-20 justify-between items-center">
         <div className="flex items-center">
           <div className="uppercase font-bold text-xl">BigCoin Exchange</div>
           <nav className="ml-14">

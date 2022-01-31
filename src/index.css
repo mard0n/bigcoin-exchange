@@ -6,11 +6,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f6f9fc;
+  color: rgb(31, 41, 55);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+main {
+  min-height: calc(100vh - 5rem - 6rem);
 }
 
 @tailwind base;

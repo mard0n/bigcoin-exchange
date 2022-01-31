@@ -11,7 +11,7 @@ const Button: FC<ButtonProps> = ({ children, ...resProps }) => {
     <button
       type="button"
       {...resProps}
-      className="w-full h-16 rounded-md bg-blue-700 text-white font-semibold tracking-wider"
+      className="w-full h-16 rounded-md bg-blue-700 text-white font-semibold tracking-wider hover:bg-blue-800"
     >
       {children}
     </button>

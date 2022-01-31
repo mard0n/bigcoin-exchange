@@ -1,8 +1,8 @@
 import React, { BaseSyntheticEvent, FC, SyntheticEvent, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useStore from '../../state';
-import Button from '../Button';
-import Input from '../Input';
+import Button from '../../components/Button';
+import Input from '../../components/Input';
 
 interface LoginProps {}
 
@@ -29,7 +29,7 @@ const Login: FC<LoginProps> = () => {
   return (
     <form
       onSubmit={handleFormSubmit}
-      className="w-full max-w-md p-8 bg-white grid gap-4 m-5 mx-auto -m-1/2"
+      className="w-full max-w-md p-8 bg-white grid gap-4 mx-auto -m-1/2 shadow-md"
     >
       <legend className="text-2xl font-bold text-gray-700 mb-2">Login</legend>
       <Input
